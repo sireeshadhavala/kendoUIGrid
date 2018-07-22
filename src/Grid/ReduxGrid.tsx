@@ -39,8 +39,6 @@ export default class ReduxGrid extends React.Component<any, any> {
 
     render() {
         const { products, sort, group, page, filter, pageSize } = this.props;
-        console.log("????????????????");
-        console.log(this.props);
         const serverSorting = true;
         const serverGrouping = true;
         const serverPaging = true;
@@ -49,12 +47,21 @@ export default class ReduxGrid extends React.Component<any, any> {
         const dataSource = new kendo.data.DataSource({
             data: products,
             sort, group, page, filter,
-            serverSorting, serverGrouping, serverPaging, serverFiltering, pageSize
-
+            serverSorting, serverGrouping, serverPaging, serverFiltering, pageSize,
+            schema: {
+                model: {
+                    id: 'ProductID',
+                    fields: {
+                        ProductID: { editable: false, nullable: true },
+                        ProductName: { validation: { required: true } },
+                        UnitPrice: { type: 'number', validation: { required: true, min: 1 } },
+                        UnitsInStock: { type: 'number', validation: { min: 0, required: true } },
+                        Discontinued: { type: 'boolean' }
+                    }
+                },
+                total: 'total'
+            }
         });
-
-        console.log("**********************************");
-        console.log(dataSource)
 
         return (
             <div style={{ 'marginBottom': '30px' }}>
